@@ -1,128 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Simple E-Commerce Page</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f4f4f4;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon.in - Ultimate Pro Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
 
-header {
-  background: #333;
-  color: white;
-  padding: 15px;
-  text-align: center;
-}
+        body {
+            background-color: #eaeded;
+            color: #0f1111;
+            overflow-x: hidden;
+        }
 
-nav {
-  background: #555;
-  padding: 10px;
-  text-align: center;
-}
+        a { text-decoration: none; color: #007185; }
+        a:hover { color: #c45500; text-decoration: underline; }
 
-nav a {
-  color: white;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
+        .navbar {
+            background-color: #131921;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-.container {
-  width: 1000px;
-  margin: 20px auto;
-  display: flex;
-  gap: 20px;
-}
+        .nav-logo {
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid transparent;
+        }
+        .nav-logo:hover { border-color: white; }
+        .nav-logo span { color: #febd69; }
 
-.product {
-  width: 300px;
-  background: white;
-  border: 1px solid #ddd;
-  padding: 15px;
-  text-align: center;
-}
+        .nav-address {
+            font-size: 12px;
+            color: #ccc;
+            margin-left: 15px;
+            padding: 5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+        .nav-address:hover { border-color: white; }
+        .nav-address strong { color: white; font-size: 14px; display: block; }
 
-.product img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
+        .nav-search {
+            display: flex;
+            flex: 1;
+            margin: 0 20px;
+            height: 40px;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: white;
+        }
+        .nav-search:focus-within {
+            box-shadow: 0 0 0 3px #f3a847;
+        }
 
-.price {
-  color: green;
-  font-size: 20px;
-  margin: 10px 0;
-}
+        .search-select {
+            background-color: #f3f3f3;
+            border: none;
+            padding: 0 15px;
+            font-size: 12px;
+            color: #555;
+            cursor: pointer;
+            border-right: 1px solid #ddd;
+        }
 
-button {
-  background: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-}
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 0 10px;
+            font-size: 15px;
+            outline: none;
+        }
 
-button:hover {
-  background: #218838;
-}
+        .search-btn {
+            background-color: #febd69;
+            border: none;
+            width: 45px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-btn:hover { background-color: #f3a847; }
 
-footer {
-  clear: both;
-  background: #333;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  margin-top: 40px;
-}
-</style>
+        .nav-right { display: flex; gap: 15px; align-items: center; }
+
+        .nav-link {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid transparent;
+        }
+        .nav-link:hover { border-color: white; }
+        .nav-link span { font-size: 12px; color: #ccc; display: block; }
+
+        .nav-cart {
+            font-size: 15px;
+            cursor: pointer;
+            background: #232f3e;
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-cart:hover { border-color: white; }
+        #cart-count {
+            background-color: #f0c14b;
+            color: black;
+            font-weight: bold;
+            padding: 1px 7px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .sub-nav {
+            background-color: #232f3e;
+            color: white;
+            padding: 8px 20px;
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            align-items: center;
+        }
+        .sub-nav div { cursor: pointer; padding: 5px; border: 1px solid transparent; }
+        .sub-nav div:hover { border-color: white; }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -365px;
+            width: 350px;
+            height: 100%;
+            background-color: white;
+            z-index: 1000;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        .sidebar.active { left: 0; }
+        
+        .sidebar-header {
+            background-color: #232f3e;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .sidebar-menu-item {
+            padding: 15px 30px;
+            font-size: 14px;
+            color: #111;
+            cursor: pointer;
+            display: block;
+        }
+        .sidebar-menu-item:hover { background-color: #eaeded; }
+        .sidebar-title {
+            padding: 15px 30px 5px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 990;
+            display: none;
+        }
+        .overlay.active { display: block; }
+
+        .hero-container { width: 100%; max-width: 1500px; margin: 0 auto; position: relative; }
+        .banner-img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 100%);
+        }
+
+        .main-content {
+            max-width: 1500px;
+            margin: -220px auto 50px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card h2 { font-size: 20px; margin-bottom: 12px; font-weight: 700; }
+
+        .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        
+        .grid-item {
+            border: 1px solid #f3f3f3;
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .grid-item img { width: 100%; height: 95px; object-fit: contain; margin-bottom: 5px; }
+        .grid-item p { font-size: 12px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .price { font-size: 13px; font-weight: bold; color: #b12704; margin-bottom: 6px;}
+
+        .btn-add {
+            background-color: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn-add:hover { background-color: #f7ca00; }
+
+        .cart-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.4);
+            z-index: 1001;
+            padding: 25px;
+            display: none;
+        }
+        .cart-modal.active { display: block; }
+        .modal-header { font-size: 20px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
+        .cart-items-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; font-size: 14px;}
+        .cart-item-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; }
+        .modal-total { font-size: 18px; font-weight: bold; text-align: right; margin-bottom: 20px; color: #b12704;}
+        .close-modal-btn { background-color: #e7e9ec; border: 1px solid #adb1b8; border-radius: 4px; padding: 8px 15px; cursor: pointer; float: left; }
+        .checkout-btn { background-color: #ffa41c; border: 1px solid #ff9900; border-radius: 4px; padding: 8px 20px; cursor: pointer; float: right; font-weight: bold; }
+
+        footer { background-color: #232f3e; color: white; margin-top: 40px; }
+        .back-to-top { background-color: #37475a; text-align: center; padding: 15px 0; font-size: 13px; cursor: pointer; }
+        .back-to-top:hover { background-color: #485769; }
+        
+        .footer-links {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        .footer-col h3 { font-size: 16px; margin-bottom: 15px; color: #fff; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: #DDD; font-size: 13px; }
+        .footer-logo-line { border-top: 1px solid #3a4553; padding: 25px 0; text-align: center; font-size: 18px; color: #ccc; }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>My E-Commerce Store</h1>
-  <p>Simple Product Page (Non‑Responsive)</p>
-</header>
+    <div class="overlay" id="screen-overlay" onclick="closeSidebar(); closeCart();"></div>
 
-<nav>
-  <a href="#">Home</a>
-  <a href="#">Products</a>
-  <a href="#">Contact</a>
-</nav>
+    <div class="sidebar" id="amazon-sidebar">
+        <div class="sidebar-header">Hello Rohan</div>
+        <div class="sidebar-title">Trending</div>
+        <div class="sidebar-menu-item">Best Sellers</div>
+        <div class="sidebar-menu-item">New Releases</div>
+        <div class="sidebar-menu-item">Movers and Shakers</div>
+        <hr>
+        <div class="sidebar-title">Shop by Category</div>
+        <div class="sidebar-menu-item">Mobiles, Computers</div>
+        <div class="sidebar-menu-item">TV, Appliances, Electronics</div>
+        <div class="sidebar-menu-item">Men's Fashion</div>
+        <div class="sidebar-menu-item">Women's Fashion</div>
+    </div>
 
-<div class="container">
+    <div class="cart-modal" id="checkout-modal">
+        <div class="modal-header">🛒 Shopping Cart Review</div>
+        <div class="cart-items-list" id="modal-items-container"></div>
+        <div class="modal-total" id="modal-total-price">Total: ₹0</div>
+        <button class="close-modal-btn" onclick="closeCart()">Close</button>
+        <button class="checkout-btn" onclick="alert('Order Placed Successfully! Thank you for shopping.')">Proceed to Buy</button>
+    </div>
 
-  <div class="product">
-    <img src="LEVEL_LEVEL_WHT-L.GRY_07_831c7a2c-ff1b-4011-9268-b11f984219c6.webp" alt="Product">
-    <h3>Product 1</h3>
-    <p>Good quality product description.</p>
-    <div class="price">₹999</div>
-    <button>Add to Cart</button>
-  </div>
+    <header class="navbar">
+        <div class="nav-logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">amazon<span>.in</span></div>
+        
+        <div class="nav-address" onclick="alert('Changing delivery pin code...')">
+            Delivering to Rohan
+            <strong> Abes College Ghaziabad 201009</strong>
+        </div>
 
-  <div class="product">
-    <img src="Poedagar-Men-Watch-Luxury-Business-Quartz-Watches-Stainless-Stain-Strap-Sport-Chronograph-Men-39-s-Wristwatch-Waterproof-Luminous-Quartz-Wristwatches_7b31bf36-11cf-4c68-8dfd-e630bc9a93f6.284ee349d31df69a9da1c2d294e2aade.avif" alt="Product">
-    <h3>Product 2</h3>
-    <p>Best selling item in store.</p>
-    <div class="price">₹1499</div>
-    <button>Add to Cart</button>
-  </div>
+        <div class="nav-search">
+            <select class="search-select">
+                <option>All Departments</option>
+                <option>Electronics</option>
+                <option>Appliances</option>
+            </select>
+            <input type="text" class="search-input" id="search-box" placeholder="Search Amazon.in">
+            <button class="search-btn" id="search-click-btn">🔍</button>
+        </div>
 
-  <div class="product">
-    <img src="product-jpeg-500x500.webp" alt="Product">
-    <h3>Product 3</h3>
-    <p>Limited stock available.</p>
-    <div class="price">₹799</div>
-    <button>Add to Cart</button>
-  </div>
+        <div class="nav-right">
+            <div class="nav-link" onclick="alert('Opening Account Panel...')">
+                <span>Hello, Rohan</span>
+                <strong>Account & Lists</strong>
+            </div>
+            <div class="nav-link" onclick="alert('Opening Order History...')">
+                <span>Returns</span>
+                <strong>& Orders</strong>
+            </div>
+            <div class="nav-cart" onclick="openCartModal()">
+                🛒 Cart <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
 
-</div>
+    <nav class="sub-nav">
+        <div onclick="openSidebar()">☰ All Menu</div>
+        <div>Fresh</div>
+        <div>MX Player</div>
+        <div>Sell</div>
+        <div>Gift Cards</div>
+        <div>Amazon Pay</div>
+        <div style="font-weight: bold; color: #febd69;">Prime User</div>
+    </nav>
 
-<footer>
-  <p>© 2026 My E-Commerce Store</p>
-</footer>
+    <div class="hero-container">
+        <img class="banner-img" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600" alt="Banner">
+    </div>
 
+    <main class="main-content">
+
+        <div class="card">
+            <h2>Pick up where you left off</h2>
+            <div class="grid-2x2">
+                <div class="grid-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQYssLq6efb4U7MkdwXuGG2ne6FF_YziYZwHjhmN1OXHKJAxvFitPU8kZ0cN2VUxFngO8b9gbZUV-84DBg967tg8XQ7vIYG8PVPpyObIBK7&usqp=CAc">
+                    <p>Atomberg Renesa</p>
+                    <div class="price">₹3,499</div>
+                    <button class="btn-add" onclick="addItemToCart('Atomberg Renesa Fan', 3499)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ6YTKpsBU-CRLcLwWItTz8jdimga_7qouHL37isFKFR0fizZBy9SxDH3djSjUC4dkTwshViSOwgpGOSg_dsucO93hdyS_JTAlKqQMJsTY&usqp=CAc">
+                    <p>Atomberg Epo</p>
+                    <div class="price">₹4,199</div>
+                    <button class="btn-add" onclick="addItemToCart('Atomberg Epo Fan', 4199)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTq8S2MID2xswb7oa70xd1MQIXU3f4SADQUN34eL_1GbUjm1-JmbqSSBtWw_aw&usqp=CAc">
+                    <p>Polycab Wizzy</p>
+                    <div class="price">₹2,100</div>
+                    <button class="btn-add" onclick="addItemToCart('Polycab Wizzy Fan', 2100)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://cms.polycab.com/media/yadfxgxp/fcespst031p_img_01.png?format=webp">
+                    <p>Polycab Plus</p>
+                    <div class="price">₹2,850</div>
+                    <button class="btn-add" onclick="addItemToCart('Polycab Plus Fan', 2850)">Add to Cart</button>
+                </div>
+            </div>
+            <a href="#">See more custom fans</a>
+        </div>
+
+        <div class="card">
+            <h2>Continue shopping deals</h2>
+            <div class="grid-2x2">
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=200">
+                    <p>Geonix 512GB SSD</p>
+                    <div class="price">₹1,999</div>
+                    <button class="btn-add" onclick="addItemToCart('Geonix 512GB SSD', 1999)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200">
+                    <p>Women's Luxury Dress</p>
+                    <div class="price">₹1,499</div>
+                    <button class="btn-add" onclick="addItemToCart('Women Dress', 1499)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=200">
+                    <p>Ryzen 5 Laptop</p>
+                    <div class="price">₹42,000</div>
+                    <button class="btn-add" onclick="addItemToCart('Ryzen 5 Laptop', 42000)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?w=200">
+                    <p>Travel Trolley Suitcase</p>
+                    <div class="price">₹3,200</div>
+                    <button class="btn-add" onclick="addItemToCart('Travel Trolley Bag', 3200)">Add to Cart</button>
+                </div>
+            </div>
+            <a href="#">Explore clearance center</a>
+        </div>
+
+        <div class="card">
+            <h2>Keep shopping for</h2>
+            <div class="grid-2x2">
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200">
+                    <p>OnePlus Nord CE</p>
+                    <div class="price">₹19,999</div>
+                    <button class="btn-add" onclick="addItemToCart('OnePlus Nord CE', 19999)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=200">
+                    <p>Aroma Diffuser Set</p>
+                    <div class="price">₹799</div>
+                    <button class="btn-add" onclick="addItemToCart('Aroma Diffuser', 799)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=200">
+                    <p>Designer Warm Lamp</p>
+                    <div class="price">₹1,150</div>
+                    <button class="btn-add" onclick="addItemToCart('Designer Warm Lamp', 1150)">Add to Cart</button>
+                </div>
+                <div class="grid-item">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200">
+                    <p>Wireless Headphones</p>
+                    <div class="price">₹2,499</div>
+                    <button class="btn-add" onclick="addItemToCart('Wireless Headphones', 2499)">Add to Cart</button>
+                </div>
+            </div>
+            <a href="#">Manage your history</a>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Back to top</div>
+        <div class="footer-links">
+            <div class="footer-col">
+                <h3>Get to Know Us</h3>
+                <ul>
+                    <li><a href="#">About Amazon</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect with Us</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Let Us Help You</h3>
+                <ul>
+                    <li><a href="#">Your Account</a></li>
+                    <li><a href="#">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-logo-line">amazon.in</div>
+    </footer>
+
+    <script>
+        let shoppingCartData = [];
+        
+        const cartCountUI = document.getElementById('cart-count');
+        const overlay = document.getElementById('screen-overlay');
+        const sidebar = document.getElementById('amazon-sidebar');
+        const checkoutModal = document.getElementById('checkout-modal');
+        const modalItemsContainer = document.getElementById('modal-items-container');
+        const modalTotalPriceUI = document.getElementById('modal-total-price');
+
+        function addItemToCart(name, price) {
+            shoppingCartData.push({ productName: name, productPrice: price });
+            cartCountUI.textContent = shoppingCartData.length;
+        }
+
+        function openCartModal() {
+            if(shoppingCartData.length === 0) {
+                alert("Your Amazon Cart is empty! Add some items first.");
+                return;
+            }
+            
+            modalItemsContainer.innerHTML = "";
+            let grandTotal = 0;
+
+            shoppingCartData.forEach((item) => {
+                grandTotal += item.productPrice;
+                const row = document.createElement('div');
+                row.className = 'cart-item-row';
+                row.innerHTML = `
+                    <span>📦 ${item.productName}</span>
+                    <strong>₹${item.productPrice.toLocaleString('en-IN')}</strong>
+                `;
+                modalItemsContainer.appendChild(row);
+            });
+
+            modalTotalPriceUI.textContent = `Total Bill: ₹${grandTotal.toLocaleString('en-IN')}`;
+            overlay.classList.add('active');
+            checkoutModal.classList.add('active');
+        }
+
+        function closeCart() {
+            overlay.classList.remove('active');
+            checkoutModal.classList.remove('active');
+        }
+
+        function openSidebar() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        document.getElementById('search-click-btn').addEventListener('click', runSearch);
+        document.getElementById('search-box').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') runSearch();
+        });
+
+          function runSearch() {
+            const text = document.getElementById('search-box').value;
+            if(text.trim() !== "") {
+                alert("Searching Amazon database grid for: " + text);
+            }
+        }
+    </script>
 </body>
 </html>
