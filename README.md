@@ -1,6 +1,6 @@
-# External-Pratical-
+# Project - 2
 
-This repository contains Web Designing Workshop External Pratical 2025-2026
+This repository contains Web Designing Workshop Project of Amazon Clone full responsive working website.
 
 ## Folders
 - index.html
@@ -10,4 +10,4 @@ This repository contains Web Designing Workshop External Pratical 2025-2026
 
 ## Author
 **Rohan Sagar**
-**B.tech 1st year, 1st sem**
+**B.tech 1st year, 2nd sem**
